@@ -48,5 +48,9 @@ task("deployCToken", "Deploy a new CToken")
     console.log("Deploying a new ZToken...");
 
     await main(hre, pool, cToken, config);
+
+    console.log("Done!");
+
+    console.log("The oracle must be configured for this CToken before it can be added to a Comptroller");
   }
 );
