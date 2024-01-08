@@ -1,5 +1,4 @@
 import * as ethers from "ethers";
-import { setTestOraclePrice } from "../script/simpleOracle";
 import { addCTokenToMarket } from "../script/ctoken";
 import { config } from "../script/config";
 import { getCTokenConfig } from "../script/utils";
