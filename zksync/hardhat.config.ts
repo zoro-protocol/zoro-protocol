@@ -53,5 +53,6 @@ import "./tasks/addCTokenToMarket";
 import "./tasks/deployCToken";
 import "./tasks/deprecateCToken";
 import "./tasks/setPriceOracle";
+import "./tasks/deployTestToken";
 
 export default config;
