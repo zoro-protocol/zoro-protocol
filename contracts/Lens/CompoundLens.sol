@@ -20,8 +20,6 @@ interface ComptrollerLensInterface {
     function borrowCaps(address) external view returns (uint);
 }
 
-}
-
 contract CompoundLens {
     struct CTokenMetadata {
         address cToken;
