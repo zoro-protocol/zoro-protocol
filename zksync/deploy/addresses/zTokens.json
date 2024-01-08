@@ -22,5 +22,8 @@
   },
   "degen:mute": {
     "280": "0x8e1b1CD5f0FA48819dbf6AfF6b499462608834Fa"
+  },
+  "degen:link": {
+    "280": "0x6402e8055e916A0dd5740bC3641CcD22FFB37Ba7"
   }
 }
