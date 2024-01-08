@@ -16,13 +16,6 @@ export async function main(
 ): Promise<void> {
   const wallet: Wallet = await hre.getZkWallet();
 
-  const oracleAddress: string = hre.getMainAddress("oracle");
-  const oracle: ethers.Contract = await hre.ethers.getContractAt(
-    "SimplePriceOracle",
-    oracleAddress,
-    wallet
-  );
-
   const cTokenAddress: string = hre.getCTokenAddress(cTokenKey);
   const cToken: ethers.Contract = await hre.ethers.getContractAt(
     "CToken",
@@ -36,6 +29,19 @@ export async function main(
     comptrollerAddress,
     wallet
   );
+
+  const oracleAddress: string = await comptroller.oracle();
+  const oracle: ethers.Contract = await hre.ethers.getContractAt(
+    "PriceOracle",
+    oracleAddress,
+    wallet
+  );
+
+  try {
+    await oracle.getUnderlyingPrice(cTokenAddress);
+  } catch (e) {
+    throw new Error(`Oracle price not set for ${cTokenAddress}`);
+  }
 
   const cTokenConfig: CTokenConfig = getCTokenConfig(config, pool, cTokenKey);
 
