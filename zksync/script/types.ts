@@ -31,8 +31,15 @@ export interface AddressConfig {
   [contract: string]: { [chainId: number]: string };
 }
 
-export interface CTokenTaskParams {
+export interface PoolTaskParams {
   pool: string;
+}
+
+export interface SetPriceOracleParams extends PoolTaskParams {
+  oracle: string;
+}
+
+export interface CTokenTaskParams extends PoolTaskParams {
   cToken: string;
 }
 

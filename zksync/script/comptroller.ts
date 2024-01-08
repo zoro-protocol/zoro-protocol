@@ -50,14 +50,21 @@ export async function upgradeComptroller(
   return comptroller;
 }
 
+export async function setPriceOracle(
+  comptroller: ethers.Contract,
+  priceOracleAddress: string,
+): Promise<void> {
+  const oracleTx: TransactionResponse = await comptroller._setPriceOracle(priceOracleAddress);
+  await oracleTx.wait();
+}
+
 export async function configureComptroller(
   comptroller: ethers.Contract,
   priceOracleAddress: string,
   closeFactor: string,
   liquidationIncentive: string
 ): Promise<void> {
-  const oracleTx: TransactionResponse = await comptroller._setPriceOracle(priceOracleAddress);
-  await oracleTx.wait();
+  await setPriceOracle(comptroller, priceOracleAddress);
 
   const closeFactorMantissa: ethers.BigNumber = ethers.utils.parseEther(closeFactor);
   const closeFactorTx: TransactionResponse = await comptroller._setCloseFactor(closeFactorMantissa);
