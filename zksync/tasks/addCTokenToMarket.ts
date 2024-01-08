@@ -15,14 +15,16 @@ export async function main(
 ): Promise<void> {
   const wallet: Wallet = await hre.getZkWallet();
 
-  const cTokenAddress: string = hre.getCTokenAddress(cTokenKey);
+  const prefix = pool === "core" ? "" : `${pool}:`;
+
+  const cTokenAddress: string = hre.getCTokenAddress(`${prefix}${cTokenKey}`);
   const cToken: ethers.Contract = await hre.ethers.getContractAt(
     "CToken",
     cTokenAddress,
     wallet
   );
 
-  const comptrollerAddress: string = hre.getMainAddress("comptroller");
+  const comptrollerAddress: string = hre.getMainAddress(`${prefix}comptroller`);
   const comptroller: ethers.Contract = await hre.ethers.getContractAt(
     "Comptroller",
     comptrollerAddress,

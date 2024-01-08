@@ -18,8 +18,8 @@ async function main(
 
   const deployer: Deployer = new Deployer(hre, wallet);
 
-  const comptrollerAddress: string = hre.getMainAddress("comptroller");
-
+  const prefix = pool === "core" ? "" : `${pool}:`;
+  const comptrollerAddress: string = hre.getMainAddress(`${prefix}comptroller`);
 
   const cTokenConfig: CTokenConfig = getCTokenConfig(config, pool, cTokenKey);
   const interestRateKey: string = `interest:${cTokenConfig.interestRateModel}`;
@@ -32,7 +32,9 @@ async function main(
     interestRateAddress
   );
 
-  hre.recordCTokenAddress(cTokenConfig.underlying, cToken.address);
+  const addressKey: string = `${prefix}${cTokenConfig.underlying}`;
+
+  hre.recordCTokenAddress(addressKey, cToken.address);
 }
 
 task("deployCToken", "Deploy a new CToken")
