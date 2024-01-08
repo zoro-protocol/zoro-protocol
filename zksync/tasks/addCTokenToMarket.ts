@@ -30,9 +30,6 @@ export async function main(
     wallet
   );
 
-  console.log("Configuring Price Oracle...");
-  await setTestOraclePrice(oracle, cTokenAddress);
-
   const comptrollerAddress: string = hre.getMainAddress("comptroller");
   const comptroller: ethers.Contract = await hre.ethers.getContractAt(
     "Comptroller",
