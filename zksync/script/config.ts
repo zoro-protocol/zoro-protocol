@@ -76,10 +76,46 @@ export const config: DeployConfig = {
       "liquidationIncentive": "1.1",
       "markets": [
         {
+          "underlying": "aave",
+          "interestRateModel": "altcoin",
+          "collateralFactor": "0.4",
+          "reserveFactor": "0.25"
+        },
+        {
+          "underlying": "doge",
+          "interestRateModel": "altcoin",
+          "collateralFactor": "0.4",
+          "reserveFactor": "0.25"
+        },
+        {
           "underlying": "eth",
           "interestRateModel": "eth",
           "collateralFactor": "0.8",
           "reserveFactor": "0.2"
+        },
+        {
+          "underlying": "link",
+          "interestRateModel": "altcoin",
+          "collateralFactor": "0.4",
+          "reserveFactor": "0.25"
+        },
+        {
+          "underlying": "pepe",
+          "interestRateModel": "altcoin",
+          "collateralFactor": "0.4",
+          "reserveFactor": "0.25"
+        },
+        {
+          "underlying": "sol",
+          "interestRateModel": "altcoin",
+          "collateralFactor": "0.4",
+          "reserveFactor": "0.25"
+        },
+        {
+          "underlying": "uni",
+          "interestRateModel": "altcoin",
+          "collateralFactor": "0.4",
+          "reserveFactor": "0.25"
         },
         {
           "underlying": "usdc",
@@ -88,10 +124,16 @@ export const config: DeployConfig = {
           "reserveFactor": "0.1"
         },
         {
-          "underlying": "mute",
-          "interestRateModel": "altcoin",
-          "collateralFactor": "0.4",
-          "reserveFactor": "0.25"
+          "underlying": "usdt",
+          "interestRateModel": "stablecoin",
+          "collateralFactor": "0.8",
+          "reserveFactor": "0.1"
+        },
+        {
+          "underlying": "wbtc",
+          "interestRateModel": "wbtc",
+          "collateralFactor": "0.8",
+          "reserveFactor": "0.2"
         }
       ]
     }
