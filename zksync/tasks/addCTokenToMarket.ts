@@ -24,12 +24,18 @@ export async function main(
     wallet
   );
 
-  const comptrollerAddress: string = hre.getMainAddress(`${prefix}comptroller`);
+  const comptrollerAddress: string = await cToken.comptroller();
   const comptroller: ethers.Contract = await hre.ethers.getContractAt(
     "Comptroller",
     comptrollerAddress,
     wallet
   );
+
+  const isListed: boolean = (await comptroller.markets(cTokenAddress))?.[0];
+
+  if (isListed) {
+    throw new Error("CToken is already listed, exiting...");
+  }
 
   const oracleAddress: string = await comptroller.oracle();
   const oracle: ethers.Contract = await hre.ethers.getContractAt(
