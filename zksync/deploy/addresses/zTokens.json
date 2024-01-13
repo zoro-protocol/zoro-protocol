@@ -25,5 +25,11 @@
   },
   "degen:link": {
     "280": "0x6402e8055e916A0dd5740bC3641CcD22FFB37Ba7"
+  },
+  "degen:wbtc": {
+    "280": "0xb52Ee74C79d2279aBa644ebcb4965381E6F5379a"
+  },
+  "degen:usdt": {
+    "280": "0x80C11Df9AfBcB3E9c8bf15365B51DA3EE151AEE7"
   }
 }
