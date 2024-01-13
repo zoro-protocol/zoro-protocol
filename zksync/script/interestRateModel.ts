@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import deployContract from "./contract";
-import { config } from "./config";
 import { Deployer } from "@matterlabs/hardhat-zksync-deploy";
 import {
+  DeployConfig,
   InterestRateArgs,
   InterestRateCollection,
   InterestRateConfig
@@ -30,7 +30,7 @@ export async function deployInterestRate(deployer: Deployer, config: InterestRat
   return jumpRate;
 }
 
-export async function deployInterestRatesAll(deployer: Deployer): Promise<InterestRateCollection> {
+export async function deployInterestRatesAll(deployer: Deployer, config: DeployConfig): Promise<InterestRateCollection> {
   const interestRates: InterestRateCollection = {};
 
   // Must complete txs sequentially for correct nonce
