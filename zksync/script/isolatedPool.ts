@@ -6,9 +6,10 @@ import { deployInterestRatesAll } from "./interestRateModel";
 import { deployLens } from "./lens";
 import { deployMaximillion } from "./maximillion";
 import { addCTokenToMarket, deployCTokenAll } from "./ctoken";
-import { config } from "./config";
+import { config, testnetConfig } from "./config";
 import { Deployer } from "@matterlabs/hardhat-zksync-deploy";
 import {
+  DeployConfig,
   DeployReturn,
   CTokenCollection,
   CTokenConfig,
@@ -39,8 +40,8 @@ async function deployIsolatedPool(
   return { comptroller, cTokens };
 }
 
-export async function deployCore(deployer: Deployer, oracleAddress: string): Promise<DeployReturn[]> {
-  const interestRates: InterestRateCollection = await deployInterestRatesAll(deployer);
+export async function deployCore(deployer: Deployer, oracleAddress: string, config: DeployConfig): Promise<DeployReturn[]> {
+  const interestRates: InterestRateCollection = await deployInterestRatesAll(deployer, config);
 
   await deployLens(deployer);
 
@@ -61,12 +62,12 @@ export async function deployTestInterestRatePool(deployer: Deployer): Promise<vo
   const priceOracle: ethers.Contract = await deployTestOracle(deployer);
   const oracleAddress: string = priceOracle.address;
 
-  const deployments: DeployReturn[] = await deployCore(deployer, oracleAddress);
+  const deployments: DeployReturn[] = await deployCore(deployer, oracleAddress, testnetConfig);
 
   for (const i in deployments) {
     const { comptroller, cTokens }: DeployReturn = deployments[i];
 
-    const markets: CTokenConfig[] = config.pools[i].markets;
+    const markets: CTokenConfig[] = testnetConfig.pools[i].markets;
 
     // Must complete txs sequentially for correct nonce
     for (const cTokenConfig of markets) {
@@ -82,5 +83,5 @@ export async function deployTestInterestRatePool(deployer: Deployer): Promise<vo
 export async function deployInterestRatePool(deployer: Deployer): Promise<void> {
   const oracleAddress: string = deployer.hre.getMainAddress("oracle");
 
-  await deployCore(deployer, oracleAddress);
+  await deployCore(deployer, oracleAddress, config);
 }
