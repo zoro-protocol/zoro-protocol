@@ -45,13 +45,10 @@ export interface CTokenTaskParams extends PoolTaskParams {
 
 export interface DeployCTokenParams extends CTokenTaskParams {}
 export interface AddCTokenToMarketParams extends CTokenTaskParams {}
+export interface DeprecateCTokenParams extends CTokenTaskParams {}
 
 export interface DeployTestTokenParams {
   underlying: string;
-}
-
-export interface DeprecateCTokenParams {
-  cToken: string;
 }
 
 export interface VerifyContractParams {
