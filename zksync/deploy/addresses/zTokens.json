@@ -1,7 +1,4 @@
 {
-  "test": {
-    "280": "0xD2eCBd2455c80e23c7D73BCbE41cc3b3DaD25476"
-  },
   "eth": {
     "280": "0xb7cdeF6521EB451D67fB72fd42460f57EdD11101"
   },
@@ -19,9 +16,6 @@
   },
   "degen:usdc": {
     "280": "0xFA2E3E60Ab9a2A2462D5609baa7ECdF8A6cbe16C"
-  },
-  "degen:mute": {
-    "280": "0x8e1b1CD5f0FA48819dbf6AfF6b499462608834Fa"
   },
   "degen:link": {
     "280": "0x6402e8055e916A0dd5740bC3641CcD22FFB37Ba7"
