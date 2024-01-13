@@ -1,4 +1,9 @@
-import { CTokenConfig, DeployConfig, InterestRateConfig } from "./types";
+import {
+  CTokenConfig,
+  DeployConfig,
+  InterestRateConfig,
+  PoolConfig
+} from "./types";
 
 const interestRateModels: InterestRateConfig[] = [
   {
@@ -174,7 +179,7 @@ const pools: PoolConfig[] = [
     "liquidationIncentive": "1.1",
     "markets": degenMarkets,
   }
-]
+];
 
 const testnetPools: PoolConfig[] = [
   {
@@ -189,7 +194,7 @@ const testnetPools: PoolConfig[] = [
     "liquidationIncentive": "1.1",
     "markets": testnetDegenMarkets,
   }
-]
+];
 
 export const config: DeployConfig = {
   interestRateModels,
