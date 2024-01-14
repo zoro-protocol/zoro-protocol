@@ -9,6 +9,7 @@ import { DeployTestTokenParams, Erc20ConstructorArgs } from "../script/types";
 async function main(
   hre: HardhatRuntimeEnvironment,
   underlying: string,
+  decimals: string
 ): Promise<void> {
   const wallet: Wallet = await hre.getZkWallet();
 
@@ -16,12 +17,11 @@ async function main(
 
   const initialAmount: ethers.BigNumber = ethers.utils.parseEther("10000000");
   const tokenName: string = `Test ${underlying.toUpperCase()}`;
-  const decimalUnits: number = 18;
   const tokenSymbol: string = underlying.toUpperCase();
   const testUsdArgs: Erc20ConstructorArgs = [
     initialAmount,
     tokenName,
-    decimalUnits,
+    decimals,
     tokenSymbol
   ];
 
@@ -35,14 +35,15 @@ async function main(
 }
 
 task("deployTestToken", "Deploy a test underlying token")
+.addOptionalParam("decimals", "Decimals of the underlying token", "18")
 .addPositionalParam("underlying", "Symbol of the underlying token")
 .setAction(
   async (
-    { underlying }: DeployTestTokenParams,
+    { underlying, decimals }: DeployTestTokenParams,
     hre: HardhatRuntimeEnvironment
   ) => {
     console.log("Deploying a test token...");
 
-    await main(hre, underlying)
+    await main(hre, underlying, decimals)
   }
 );

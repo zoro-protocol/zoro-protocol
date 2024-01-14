@@ -49,6 +49,7 @@ export interface DeprecateCTokenParams extends CTokenTaskParams {}
 
 export interface DeployTestTokenParams {
   underlying: string;
+  decimals: string;
 }
 
 export interface VerifyContractParams {
@@ -66,7 +67,7 @@ export interface CTokenCollection extends ContractCollection {}
 export type Erc20ConstructorArgs = [
   initialAmount: ethers.BigNumber,
   tokenName: string,
-  decimalUnits: number,
+  decimalUnits: number | string,
   tokenSymbol: string
 ];
 
