@@ -45,14 +45,14 @@ const interestRateModels: InterestRateConfig[] = [
 
 const coreMarkets: CTokenConfig[] = [
   {
-    "underlying": "eth",
-    "interestRateModel": "eth",
+    "underlying": "dai",
+    "interestRateModel": "stablecoin",
     "collateralFactor": "0.8",
-    "reserveFactor": "0.2"
+    "reserveFactor": "0.1"
   },
   {
-    "underlying": "wbtc",
-    "interestRateModel": "wbtc",
+    "underlying": "eth",
+    "interestRateModel": "eth",
     "collateralFactor": "0.8",
     "reserveFactor": "0.2"
   },
@@ -67,6 +67,12 @@ const coreMarkets: CTokenConfig[] = [
     "interestRateModel": "stablecoin",
     "collateralFactor": "0.8",
     "reserveFactor": "0.1"
+  },
+  {
+    "underlying": "wbtc",
+    "interestRateModel": "wbtc",
+    "collateralFactor": "0.8",
+    "reserveFactor": "0.2"
   }
 ];
 
@@ -78,10 +84,10 @@ const degenMarkets: CTokenConfig[] = [
     "reserveFactor": "0.25"
   },
   {
-    "underlying": "doge",
-    "interestRateModel": "altcoin",
-    "collateralFactor": "0.4",
-    "reserveFactor": "0.25"
+    "underlying": "dai",
+    "interestRateModel": "stablecoin",
+    "collateralFactor": "0.8",
+    "reserveFactor": "0.1"
   },
   {
     "underlying": "eth",
@@ -131,7 +137,34 @@ const degenMarkets: CTokenConfig[] = [
     "collateralFactor": "0.8",
     "reserveFactor": "0.2"
   }
-]
+];
+
+const testnetCoreMarkets: CTokenConfig[] = [
+  {
+    "underlying": "eth",
+    "interestRateModel": "eth",
+    "collateralFactor": "0.8",
+    "reserveFactor": "0.2"
+  },
+  {
+    "underlying": "wbtc",
+    "interestRateModel": "wbtc",
+    "collateralFactor": "0.8",
+    "reserveFactor": "0.2"
+  },
+  {
+    "underlying": "usdc",
+    "interestRateModel": "stablecoin",
+    "collateralFactor": "0.825",
+    "reserveFactor": "0.1"
+  },
+  {
+    "underlying": "usdt",
+    "interestRateModel": "stablecoin",
+    "collateralFactor": "0.8",
+    "reserveFactor": "0.1"
+  }
+];
 
 const testnetDegenMarkets: CTokenConfig[] = [
   {
@@ -186,7 +219,7 @@ const testnetPools: PoolConfig[] = [
     "name": "core",
     "closeFactor": "0.5",
     "liquidationIncentive": "1.1",
-    "markets": coreMarkets,
+    "markets": testnetCoreMarkets,
   },
   {
     "name": "degen",
