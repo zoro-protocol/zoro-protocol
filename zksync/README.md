@@ -1,5 +1,11 @@
 # Zoro Protocol
 
+## zkSync Compatibility Changes
+
+- block number to timestamp
+  - February 7, 2106 6:28:15 AM
+- maximillion transfer to .call
+
 ## Testing
 
 ### Prerequisites
