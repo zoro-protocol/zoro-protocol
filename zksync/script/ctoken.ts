@@ -9,6 +9,37 @@ import {
   InterestRateCollection
 } from "./types";
 
+export async function safeDeployCToken(
+  deployer: Deployer,
+  comptroller: ethers.Contract,
+  underlying: ethers.Contract,
+  interestRate: string
+): Promise<ethers.Contract> {
+  const cToken: ethers.Contract = await deployCToken(deployer, comptroller.address, underlying.address, interestRate);
+  await comptroller._supportMarket(cToken.address);
+
+  const exchangeRate: ethers.BigNumber = await cToken.exchangeRateCurrent();
+  const mintAmount: ethers.BigNumber = exchangeRate;
+
+  const underlyingBalance: ethers.BigNumber = await underlying.balanceOf(deployer.zkWallet.address);
+  if (underlyingBalance.lt(mintAmount)) {
+    throw new Error("Insufficient underlying balance to mint CToken");
+  }
+
+  await cToken.mint(mintAmount);
+
+  const cTokenBalance: ethers.BigNumber = await cToken.balanceOf(deployer.zkWallet.address);
+  const totalSupply: ethers.BigNumber = await cToken.totalSupply();
+
+  if (cTokenBalance.lt(1) || totalSupply.lt(1)) {
+    throw new Error("Failed to mint 1 wei of CToken");
+  }
+
+  await cToken.transfer(ethers.constants.AddressZero, cTokenBalance);
+
+  return cToken;
+}
+
 export async function deployCToken(
   deployer: Deployer,
   comptroller: string,
@@ -47,16 +78,18 @@ export async function deployCTokenAll(
 
   // Must complete txs sequentially for correct nonce
   for (const config of cTokenConfigs) {
-    const { underlying, interestRateModel } = config;
+    const { underlying: underlyingAddress, interestRateModel } = config;
 
-    const cToken: ethers.Contract = await deployCToken(
+    const underlying: ethers.Contract = await deployer.hre.ethers.getContractAt("EIP20Interface", underlyingAddress, deployer.zkWallet);
+
+    const cToken: ethers.Contract = await safeDeployCToken(
       deployer,
-      comptroller.address,
+      comptroller,
       underlying,
       interestRates[interestRateModel].address
     );
 
-    cTokens[underlying] = cToken;
+    cTokens[underlyingAddress] = cToken;
   }
 
   return cTokens;
