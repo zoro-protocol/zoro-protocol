@@ -27,7 +27,7 @@ export default async function(hre: HardhatRuntimeEnvironment) {
   // Wait until the deposit is processed on zkSync
   // await depositHandle.wait();
 
-  if (chainId === 270) {
+  if (chainId === 260) {
     console.log("Deploying contracts for local test network");
 
     await deployMulticall(deployer);
