@@ -9,61 +9,106 @@ import {
   InterestRateCollection
 } from "./types";
 
-export async function safeDeployCToken(
+async function safeDeployCEther(
   deployer: Deployer,
   comptroller: ethers.Contract,
-  underlying: ethers.Contract,
   interestRate: string
 ): Promise<ethers.Contract> {
-  const cToken: ethers.Contract = await deployCToken(deployer, comptroller.address, underlying.address, interestRate);
+  const cToken: ethers.Contract = await deployCEther(
+    deployer,
+    comptroller.address,
+    interestRate
+  );
+
+  console.log(`Supporting CEther with Comptroller`);
   await comptroller._supportMarket(cToken.address);
 
-  const exchangeRate: ethers.BigNumber = await cToken.exchangeRateCurrent();
-  const mintAmount: ethers.BigNumber = exchangeRate;
+  const exchangeRate: ethers.BigNumber = await cToken.callStatic.exchangeRateCurrent();
+  const mintAmount: ethers.BigNumber = exchangeRate.div(ethers.constants.WeiPerEther);
+
+  const underlyingBalance: ethers.BigNumber = await deployer.zkWallet.getBalance();
+  if (underlyingBalance.lt(mintAmount)) {
+    throw new Error("Insufficient underlying balance to mint CToken");
+  }
+
+  console.log(`Minting with ${mintAmount} wei of eth`);
+
+  await cToken.mint({ value: mintAmount });
+
+  return cToken;
+}
+
+async function safeDeployCErc20(
+  deployer: Deployer,
+  underlying: ethers.Contract,
+  comptroller: ethers.Contract,
+  interestRate: string
+): Promise<ethers.Contract> {
+  const cToken: ethers.Contract = await deployCErc20(
+    deployer,
+    underlying.address,
+    comptroller.address,
+    interestRate
+  );
+
+  console.log(`Supporting ${underlying.address} with Comptroller`);
+  await comptroller._supportMarket(cToken.address);
+
+  const exchangeRate: ethers.BigNumber = await cToken.callStatic.exchangeRateCurrent();
+  const mintAmount: ethers.BigNumber = exchangeRate.div(ethers.constants.WeiPerEther);
 
   const underlyingBalance: ethers.BigNumber = await underlying.balanceOf(deployer.zkWallet.address);
   if (underlyingBalance.lt(mintAmount)) {
     throw new Error("Insufficient underlying balance to mint CToken");
   }
 
+  console.log(`Minting with ${mintAmount} wei of ${underlying.address}`);
+
+  await underlying.approve(cToken.address, mintAmount);
   await cToken.mint(mintAmount);
-
-  const cTokenBalance: ethers.BigNumber = await cToken.balanceOf(deployer.zkWallet.address);
-  const totalSupply: ethers.BigNumber = await cToken.totalSupply();
-
-  if (cTokenBalance.lt(1) || totalSupply.lt(1)) {
-    throw new Error("Failed to mint 1 wei of CToken");
-  }
-
-  await cToken.transfer(ethers.constants.AddressZero, cTokenBalance);
 
   return cToken;
 }
 
 export async function deployCToken(
   deployer: Deployer,
-  comptroller: string,
-  underlying: string,
+  comptroller: ethers.Contract,
+  underlyingSymbol: string,
   interestRate: string
 ): Promise<ethers.Contract> {
   let cToken: ethers.Contract;
 
-  if (underlying === "eth") {
-    cToken = await deployCEther(
+  if (underlyingSymbol === "eth") {
+    cToken = await safeDeployCEther(
       deployer,
       comptroller,
       interestRate
     );
   } else {
-    const underlyingAddress: string = deployer.hre.getUnderlyingToken(underlying);
+    const underlyingAddress: string = deployer.hre.getUnderlyingToken(underlyingSymbol);
+    const underlying: ethers.Contract = await deployer.hre.ethers.getContractAt("EIP20Interface", underlyingAddress, deployer.zkWallet);
 
-    cToken = await deployCErc20(
+    cToken = await safeDeployCErc20(
       deployer,
-      underlyingAddress,
+      underlying,
       comptroller,
       interestRate
     );
   }
+
+  const cTokenBalance: ethers.BigNumber = await cToken.balanceOf(deployer.zkWallet.address);
+
+  console.log(`Minted ${cTokenBalance} of ${cToken.address}`);
+
+  const totalSupply: ethers.BigNumber = await cToken.totalSupply();
+
+  if (cTokenBalance.lt(1) || totalSupply.lt(1)) {
+    throw new Error("Failed to mint 1 wei of CToken");
+  }
+
+  console.log(`Burning ${cTokenBalance} of ${cToken.address}`);
+
+  await cToken.transfer(ethers.constants.AddressZero, cTokenBalance);
 
   return cToken;
 }
@@ -78,18 +123,16 @@ export async function deployCTokenAll(
 
   // Must complete txs sequentially for correct nonce
   for (const config of cTokenConfigs) {
-    const { underlying: underlyingAddress, interestRateModel } = config;
+    const { underlying: underlyingSymbol, interestRateModel } = config;
 
-    const underlying: ethers.Contract = await deployer.hre.ethers.getContractAt("EIP20Interface", underlyingAddress, deployer.zkWallet);
-
-    const cToken: ethers.Contract = await safeDeployCToken(
+    const cToken: ethers.Contract = await deployCToken(
       deployer,
       comptroller,
-      underlying,
+      underlyingSymbol,
       interestRates[interestRateModel].address
     );
 
-    cTokens[underlyingAddress] = cToken;
+    cTokens[underlyingSymbol] = cToken;
   }
 
   return cTokens;
