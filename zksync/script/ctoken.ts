@@ -106,10 +106,6 @@ export async function deployCToken(
     throw new Error("Failed to mint 1 wei of CToken");
   }
 
-  console.log(`Burning ${cTokenBalance} of ${cToken.address}`);
-
-  await cToken.transfer(ethers.constants.AddressZero, cTokenBalance);
-
   return cToken;
 }
 
