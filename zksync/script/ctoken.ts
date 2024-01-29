@@ -24,7 +24,9 @@ async function safeDeployCEther(
   await comptroller._supportMarket(cToken.address);
 
   const exchangeRate: ethers.BigNumber = await cToken.callStatic.exchangeRateCurrent();
-  const mintAmount: ethers.BigNumber = exchangeRate.div(ethers.constants.WeiPerEther);
+  const cTokenBase: ethers.BigNumber = ethers.utils.parseUnits("1", 8);
+  const exchangeRateBase: ethers.BigNumber = ethers.constants.WeiPerEther;
+  const mintAmount: ethers.BigNumber = exchangeRate.mul(cTokenBase).div(exchangeRateBase);
 
   const underlyingBalance: ethers.BigNumber = await deployer.zkWallet.getBalance();
   if (underlyingBalance.lt(mintAmount)) {
@@ -55,7 +57,9 @@ async function safeDeployCErc20(
   await comptroller._supportMarket(cToken.address);
 
   const exchangeRate: ethers.BigNumber = await cToken.callStatic.exchangeRateCurrent();
-  const mintAmount: ethers.BigNumber = exchangeRate.div(ethers.constants.WeiPerEther);
+  const cTokenBase: ethers.BigNumber = ethers.utils.parseUnits("1", 8);
+  const exchangeRateBase: ethers.BigNumber = ethers.constants.WeiPerEther;
+  const mintAmount: ethers.BigNumber = exchangeRate.mul(cTokenBase).div(exchangeRateBase);
 
   const underlyingBalance: ethers.BigNumber = await underlying.balanceOf(deployer.zkWallet.address);
   if (underlyingBalance.lt(mintAmount)) {
