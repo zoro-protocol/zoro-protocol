@@ -25,7 +25,7 @@ export async function deployCErc20(
   const underlyingDecimals: number = await underlying.decimals();
   const initialExchangeRateDecimals: number = underlyingDecimals + 18 - decimals;
   const initialExchangeRateMantissa: ethers.BigNumber = ethers.utils.parseUnits(
-    "1",
+    "0.02",
     initialExchangeRateDecimals
   );
 

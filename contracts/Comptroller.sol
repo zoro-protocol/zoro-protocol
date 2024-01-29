@@ -961,6 +961,10 @@ contract Comptroller is ComptrollerV7Storage, ComptrollerInterface, ComptrollerE
         allMarkets.push(CToken(cToken));
     }
 
+    /**
+     * @dev `getBlockNumber` returns a timestamp for zksync compatibility
+     * @dev `getBlockNumber` overflows after Feb 7, 2106 6:28:15 AM
+     */
     function _initializeMarket(address cToken) internal {
         uint32 blockNumber = safe32(getBlockNumber(), "block number exceeds 32 bits");
 
@@ -1459,6 +1463,7 @@ contract Comptroller is ComptrollerV7Storage, ComptrollerInterface, ComptrollerE
 
     /**
      * @dev Switched to timestamp for use with zkSync network
+     * @dev Overflows after Feb 7, 2106 6:28:15 AM in `_initializeMarket`
      */
     function getBlockNumber() virtual public view returns (uint) {
         return block.timestamp;

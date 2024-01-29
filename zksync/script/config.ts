@@ -236,5 +236,5 @@ export const config: DeployConfig = {
 
 export const testnetConfig: DeployConfig = {
   interestRateModels,
-  testnetPools,
+  "pools": testnetPools,
 }
