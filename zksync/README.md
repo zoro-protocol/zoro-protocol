@@ -45,11 +45,11 @@ yarn hardhat run script/test.ts
 
 ## Production Deployment
 
-1. [Create a Gnosis Safe multisig](https://app.safe.global/).
+### Create a [Gnosis Safe](https://app.safe.global/) multisig
 
-2. [Deploy a production oracle](https://github.com/zoro-protocol/open-oracle/tree/master/zksync).
+### Deploy a [production oracle](https://github.com/zoro-protocol/open-oracle/tree/master/zksync)
 
-3. Configure addresses:
+### Configure addresses
 
 Set the admin address to a Gnosis Safe multisig and the oracle address to the production oracle.
 
@@ -70,7 +70,9 @@ Example using the zkSync Era chain ID 324 shown below.
 }
 ```
 
-4. Supply deployer account with enough assets to prevent low liquidity attacks by seeding `CToken` markets with liquidity.
+### Supply deployer with seed liquidity
+
+Supply deployer account with enough assets to prevent low liquidity attacks by seeding `CToken` markets with liquidity.
 
 The amount of assets should be enough to mint 1e8, or 10,000,000, base units of each `CToken`. The formula is `amount = 1e8 * exchangeRate`.
 
@@ -80,7 +82,7 @@ As long as the deployer can mint 1e8 for each `CToken`, the protocol is protecte
 
 E.g. Supply `0.0000000000002` ETH to the deployer account for each `CEther` contract that will be deployed.
 
-5. Run deployment script:
+### Run deployment script
 
 Note: you will need to set `ETH_PK` or `ETH_KEYSTORE` in `.env` with your private key or the path to your keystore file. [Either can be configured](https://github.com/zoro-protocol/hardhat-zksync-web3) for a network in `hardhat.config.ts`.
 
@@ -88,10 +90,12 @@ Note: you will need to set `ETH_PK` or `ETH_KEYSTORE` in `.env` with your privat
 yarn zksync-deploy --network zkSyncMainnet
 ```
 
-6. Transfer ownership of Comptrollers to admin multisig:
+### Transfer ownership of Comptrollers to admin multisig
 
 ```bash
 yarn hardhat transferComptrollerOwnership
 ```
 
-7. Accept pending admin transfer for Comptollers by [calling `_acceptAdmin` on each contract](https://help.safe.global/en/articles/40870-contract-interactions) from the Gnosis Safe multisig.
+### Accept Comptroller admin transfer to admin multisig
+
+Accept pending admin transfer for Comptollers by [calling `_acceptAdmin` on each contract](https://help.safe.global/en/articles/40870-contract-interactions) from the Gnosis Safe multisig.
