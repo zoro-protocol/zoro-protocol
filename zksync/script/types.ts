@@ -65,31 +65,31 @@ export interface InterestRateCollection extends ContractCollection {}
 export interface CTokenCollection extends ContractCollection {}
 
 export type Erc20ConstructorArgs = [
-  initialAmount: ethers.BigNumber,
-  tokenName: string,
-  decimalUnits: number | string,
-  tokenSymbol: string
+  ethers.BigNumber,
+  string,
+  number | string,
+  string
 ];
 
 export type CErc20ImmutableConstructorArgs = [
-  underlying: string,
-  comptroller: string,
-  interestRateModel: string,
-  initialExchangeRateMantissa: ethers.BigNumber,
-  name: string,
-  symbol: string,
-  decimals: number,
-  admin: string,
+  string,
+  string,
+  string,
+  ethers.BigNumber,
+  string,
+  string,
+  number,
+  string,
 ];
 
 export type CEtherConstructorArgs = [
-  comptroller: string,
-  interestRateModel: string,
-  initialExchangeRateMantissa: ethers.BigNumber,
-  name: string,
-  symbol: string,
-  decimals: number,
-  admin: string,
+  string,
+  string,
+  ethers.BigNumber,
+  string,
+  string,
+  number,
+  string,
 ];
 
 export type InterestRateArgs = [
