@@ -55,18 +55,18 @@ Set the admin address to a Gnosis Safe multisig and the oracle address to the pr
 
 Example using the zkSync Era chain ID 324 shown below.
 
-```json
-./zksync/deploy/addresses/main.json
+```jsonc
+// ./zksync/deploy/addresses/main.json
 
 {
-  ...
+  // ...
   "admin": {
     "324": "<admin address>"
   },
   "oracle": {
     "324": "<oracle address>"
   },
-  ...
+  // ...
 }
 ```
 
