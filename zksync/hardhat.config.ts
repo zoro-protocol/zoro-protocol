@@ -41,6 +41,17 @@ const config: HardhatUserConfig = {
       zkWallet: {
         keystore: ETH_KEYSTORE
       }
+    },
+    zkSyncMainnet: {
+      url: "https://mainnet.era.zksync.io",
+      ethNetwork: "mainnet", // RPC URL of the network (e.g. `https://goerli.infura.io/v3/<API_KEY>`)
+      chainId: 324,
+      zksync: true,
+      verifyURL:
+        "https://zksync2-mainnet-explorer.zksync.io/contract_verification", // Verification endpoint
+      zkWallet: {
+        keystore: ETH_KEYSTORE
+      }
     }
   },
 
