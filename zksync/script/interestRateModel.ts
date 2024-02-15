@@ -11,7 +11,7 @@ import {
 export async function deployInterestRate(deployer: Deployer, config: InterestRateConfig): Promise<ethers.Contract> {
   const { baseRatePerYear, multiplierPerYear, jumpMultiplierPerYear, kink } = config;
 
-  const owner: string = deployer.zkWallet.address;
+  const owner: string = deployer.hre.getMainAddress("admin")
 
   const interestRateArgs: InterestRateArgs = [
     ethers.utils.parseEther(baseRatePerYear),
