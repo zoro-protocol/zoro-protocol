@@ -1,0 +1,3 @@
+[submodule "zksync/open-oracle"]
+	path = zksync/open-oracle
+	url = git@github.com-enzo:zoro-protocol/open-oracle.git

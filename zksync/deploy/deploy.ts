@@ -5,6 +5,7 @@ import { getChainId } from "../script/utils";
 import { deployMulticall } from "../script/multicall";
 import { deployInterestRatePool, deployTestInterestRatePool } from "../script/isolatedPool";
 import { deployTestTokenAll } from "../script/testToken";
+import { config as mainnetConfig, testnetConfig } from "../script/config";
 
 // An example of a deploy script that will deploy and call a simple contract.
 export default async function(hre: HardhatRuntimeEnvironment) {
@@ -34,12 +35,12 @@ export default async function(hre: HardhatRuntimeEnvironment) {
 
     await deployTestTokenAll(deployer);
 
-    await deployTestInterestRatePool(deployer);
+    await deployTestInterestRatePool(deployer, testnetConfig);
   } else if (chainId === 280) {
     await deployMulticall(deployer);
 
-    await deployTestInterestRatePool(deployer);
+    await deployInterestRatePool(deployer, testnetConfig);
   } else {
-    await deployInterestRatePool(deployer);
+    await deployInterestRatePool(deployer, mainnetConfig);
   }
 }
