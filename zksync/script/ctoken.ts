@@ -1,7 +1,10 @@
 import { ethers } from "ethers";
 import { deployCErc20 } from "./cerc20";
 import { deployCEther } from "./cether";
+import { getTokenConfig } from "../script/oracle";
+import { getChainId } from "./utils";
 import { Deployer } from "@matterlabs/hardhat-zksync-deploy";
+import { type TokenConfig } from "../open-oracle/configuration/parameters-price-oracle";
 import { TransactionResponse } from "ethers/providers";
 import {
   CTokenCollection,
@@ -21,7 +24,8 @@ async function safeDeployCEther(
   );
 
   console.log(`Supporting CEther with Comptroller`);
-  await comptroller._supportMarket(cToken.address);
+  const supportTx: TransactionResponse = await comptroller._supportMarket(cToken.address);
+  await supportTx.wait();
 
   const exchangeRate: ethers.BigNumber = await cToken.callStatic.exchangeRateCurrent();
   const cTokenBase: ethers.BigNumber = ethers.utils.parseUnits("1", 8);
@@ -35,7 +39,8 @@ async function safeDeployCEther(
 
   console.log(`Minting with ${mintAmount} wei of eth`);
 
-  await cToken.mint({ value: mintAmount });
+  const mintTx: TransactionResponse = await cToken.mint({ value: mintAmount });
+  await mintTx.wait();
 
   return cToken;
 }
@@ -54,7 +59,8 @@ async function safeDeployCErc20(
   );
 
   console.log(`Supporting ${underlying.address} with Comptroller`);
-  await comptroller._supportMarket(cToken.address);
+  const supportTx: TransactionResponse = await comptroller._supportMarket(cToken.address);
+  await supportTx.wait();
 
   const exchangeRate: ethers.BigNumber = await cToken.callStatic.exchangeRateCurrent();
   const cTokenBase: ethers.BigNumber = ethers.utils.parseUnits("1", 8);
@@ -68,8 +74,11 @@ async function safeDeployCErc20(
 
   console.log(`Minting with ${mintAmount} wei of ${underlying.address}`);
 
-  await underlying.approve(cToken.address, mintAmount);
-  await cToken.mint(mintAmount);
+  const approveTx: TransactionResponse = await underlying.approve(cToken.address, mintAmount);
+  await approveTx.wait();
+
+  const mintTx: TransactionResponse = await cToken.mint(mintAmount);
+  await mintTx.wait();
 
   return cToken;
 }
@@ -107,7 +116,7 @@ export async function deployCToken(
   const totalSupply: ethers.BigNumber = await cToken.totalSupply();
 
   if (cTokenBalance.lt(1) || totalSupply.lt(1)) {
-    throw new Error("Failed to mint 1 wei of CToken");
+    throw new Error("Failed to mint 1e8 wei of CToken");
   }
 
   return cToken;
@@ -116,6 +125,7 @@ export async function deployCToken(
 export async function deployCTokenAll(
   deployer: Deployer,
   comptroller: ethers.Contract,
+  oracle: ethers.Contract,
   interestRates: InterestRateCollection,
   cTokenConfigs: CTokenConfig[]
 ): Promise<CTokenCollection> {
@@ -132,10 +142,49 @@ export async function deployCTokenAll(
       interestRates[interestRateModel].address
     );
 
+    if (getChainId(deployer.hre) !== 260) {
+      await configureCToken(deployer, comptroller, oracle, cToken, config);
+    }
+
     cTokens[underlyingSymbol] = cToken;
   }
 
   return cTokens;
+}
+
+export async function configureCToken(
+  deployer: Deployer,
+  comptroller: ethers.Contract,
+  oracle: ethers.Contract,
+  cToken: ethers.Contract,
+  config: CTokenConfig
+): Promise<void> {
+  try {
+    await oracle.getConfig(cToken.address); // reverts if there is no config
+    console.log(`Config for ${cToken.address} already exists`);
+  } catch {
+    const oracleConfig: TokenConfig = getTokenConfig(deployer.hre, config.underlying, cToken.address);
+    const oracleTx: TransactionResponse = await oracle.addConfig(oracleConfig);
+    oracleTx.wait();
+  }
+
+  console.log(`Setting collateral factor to ${config.collateralFactor}`);
+
+  const collateralFactor: ethers.BigNumber = ethers.utils.parseEther(config.collateralFactor);
+
+  // If the ctoken isn't a supported market, it will fail to set the collateral factor
+  // If the ctoken does not have an oracle price, it will fail to set the collateral factor
+  const collateralTx: TransactionResponse = await comptroller._setCollateralFactor(
+    cToken.address,
+    collateralFactor
+  );
+  await collateralTx.wait();
+
+  console.log(`Setting reserve factor to ${config.reserveFactor}`);
+
+  const reserveFactor: ethers.BigNumber = ethers.utils.parseEther(config.reserveFactor);
+  const reserveTx: TransactionResponse = await cToken._setReserveFactor(reserveFactor);
+  await reserveTx.wait();
 }
 
 export async function addCTokenToMarket(

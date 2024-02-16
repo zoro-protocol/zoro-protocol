@@ -9,12 +9,7 @@ type AddressChainConfig = { [chainId: number]: string };
 type AddressConfig = { [contract: string]: AddressChainConfig };
 type AssetConfig = { [asset: string]: { decimals: number } };
 
-function _getTokenConfig(chainId: number, key: string, value: AddressChainConfig): TokenConfig {
-    const cToken: string = value[chainId];
-    if (cToken === undefined) {
-        throw new Error(`No zToken for ${key} exists on chain ID ${chainId}`);
-    }
-
+function _getTokenConfig(chainId: number, key: string, cToken: string): TokenConfig {
     const assetKey: string = key.split(":").pop() as string;
 
     const priceFeedKey = `${assetKey}-usd`;
@@ -33,7 +28,7 @@ function _getTokenConfig(chainId: number, key: string, value: AddressChainConfig
     return { cToken, baseUnit, priceFeed };
 }
 
-export function getTokenConfig(hre: HardhatRuntimeEnvironment, underlying: string): TokenConfig {
+export function getTokenConfig(hre: HardhatRuntimeEnvironment, underlying: string, cTokenAddress: string | null = null): TokenConfig {
     const chainId: number | undefined = hre.network.config.chainId;
 
     if (typeof chainId === "undefined") {
@@ -42,7 +37,12 @@ export function getTokenConfig(hre: HardhatRuntimeEnvironment, underlying: strin
 
     const addressConfig: AddressChainConfig = (zTokens as AddressConfig)[underlying];
 
-    return _getTokenConfig(chainId, underlying, addressConfig);
+    const cToken: string = cTokenAddress === null ? addressConfig[chainId] : cTokenAddress;
+    if (cToken === undefined) {
+        throw new Error(`No zToken for ${underlying} exists on chain ID ${chainId}`);
+    }
+
+    return _getTokenConfig(chainId, underlying, cToken);
 }
 
 export function getTokenConfigs(hre: HardhatRuntimeEnvironment): TokenConfig[] {
