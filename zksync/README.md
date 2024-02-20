@@ -47,7 +47,11 @@ yarn hardhat run script/test.ts
 
 ### Create a [Gnosis Safe](https://app.safe.global/) multisig
 
+Verify the signing strategy before transferring ownership of any contracts.
+
 ### Deploy a [production oracle](https://github.com/zoro-protocol/open-oracle/tree/master/zksync)
+
+Use the same deployer account to deploy the oracle to avoid permission issues when running the Zoro Protocol deploy script.
 
 ### Configure addresses
 
