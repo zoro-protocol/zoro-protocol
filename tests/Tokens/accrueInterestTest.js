@@ -10,7 +10,7 @@ const {
 
 const blockNumber = 2e7;
 const borrowIndex = 1e18;
-const borrowRate = .000001;
+const borrowRate = 0.000000083;
 
 async function pretendBlock(cToken, accrualBlock = blockNumber, deltaBlocks = 1) {
   await send(cToken, 'harnessSetAccrualBlockNumber', [etherUnsigned(blockNumber)]);
@@ -39,7 +39,7 @@ describe('CToken', () => {
   describe('accrueInterest', () => {
     it('reverts if the interest rate is absurdly high', async () => {
       await pretendBlock(cToken, blockNumber, 1);
-      expect(await call(cToken, 'getBorrowRateMaxMantissa')).toEqualNumber(etherMantissa(0.000005)); // 0.0005% per block
+      expect(await call(cToken, 'getBorrowRateMaxMantissa')).toEqualNumber(etherMantissa(0.000005).div(12).integerValue(1)); // 0.0005% per block
       await setBorrowRate(cToken, 0.001e-2); // 0.0010% per block
       await expect(send(cToken, 'accrueInterest')).rejects.toRevert("revert borrow rate is absurdly high");
     });
@@ -80,7 +80,7 @@ describe('CToken', () => {
     });
 
     it('fails if interest accumulated for reserves calculation fails', async () => {
-      await setBorrowRate(cToken, .000001);
+      await setBorrowRate(cToken, 0.000000083);
       await send(cToken, 'harnessExchangeRateDetails', [0, etherUnsigned(1e30), UInt256Max()]);
       await send(cToken, 'harnessSetReserveFactorFresh', [etherUnsigned(1e10)]);
       await pretendBlock(cToken, blockNumber, 5e20)

@@ -84,7 +84,7 @@ describe('Flywheel', () => {
   let root, a1, a2, a3, accounts;
   let comptroller, cLOW, cREP, cZRX, cEVIL;
   beforeEach(async () => {
-    let interestRateModelOpts = {borrowRate: 0.000001};
+    let interestRateModelOpts = {borrowRate: 0.000000083};
     [root, a1, a2, a3, ...accounts] = saddle.accounts;
     comptroller = await makeComptroller();
     cLOW = await makeCToken({comptroller, supportMarket: true, underlyingPrice: 1, interestRateModelOpts});
