@@ -8,21 +8,21 @@ import {
 const interestRateModels: InterestRateConfig[] = [
   {
     "name": "eth",
-    "baseRatePerYear": "0.02",
+    "baseRatePerYear": "0.00",
     "multiplierPerYear": "0.04",
     "jumpMultiplierPerYear": "2",
-    "kink": "0.85"
+    "kink": "85"
   },
   {
     "name": "stablecoin",
-    "baseRatePerYear": "0.02",
+    "baseRatePerYear": "0.00",
     "multiplierPerYear": "0.05",
     "jumpMultiplierPerYear": "2.5",
     "kink": "80"
   },
   {
     "name": "wbtc",
-    "baseRatePerYear": "0.02",
+    "baseRatePerYear": "0.00",
     "multiplierPerYear": "0.09",
     "jumpMultiplierPerYear": "2",
     "kink": "75"
@@ -35,11 +35,32 @@ const interestRateModels: InterestRateConfig[] = [
     "kink": "60"
   },
   {
-    "name": "altcoin",
+    "name": "degen:eth",
+    "baseRatePerYear": "0.02",
+    "multiplierPerYear": "0.08",
+    "jumpMultiplierPerYear": "2",
+    "kink": "85"
+  },
+  {
+    "name": "degen:stablecoin",
+    "baseRatePerYear": "0.02",
+    "multiplierPerYear": "0.10",
+    "jumpMultiplierPerYear": "2.5",
+    "kink": "80"
+  },
+  {
+    "name": "degen:token",
     "baseRatePerYear": "0.02",
     "multiplierPerYear": "0.2",
     "jumpMultiplierPerYear": "3",
-    "kink": "0.50"
+    "kink": "50"
+  },
+  {
+    "name": "degen:wbtc",
+    "baseRatePerYear": "0.02",
+    "multiplierPerYear": "0.18",
+    "jumpMultiplierPerYear": "2",
+    "kink": "75"
   }
 ];
 
@@ -79,61 +100,61 @@ const coreMarkets: CTokenConfig[] = [
 const degenMarkets: CTokenConfig[] = [
   {
     "underlying": "aave",
-    "interestRateModel": "altcoin",
+    "interestRateModel": "degen:token",
     "collateralFactor": "0.4",
     "reserveFactor": "0.25"
   },
   {
     "underlying": "dai",
-    "interestRateModel": "stablecoin",
+    "interestRateModel": "degen:stablecoin",
     "collateralFactor": "0.8",
     "reserveFactor": "0.1"
   },
   {
     "underlying": "eth",
-    "interestRateModel": "eth",
+    "interestRateModel": "degen:eth",
     "collateralFactor": "0.8",
     "reserveFactor": "0.2"
   },
   {
     "underlying": "link",
-    "interestRateModel": "altcoin",
+    "interestRateModel": "degen:token",
     "collateralFactor": "0.4",
     "reserveFactor": "0.25"
   },
   {
     "underlying": "pepe",
-    "interestRateModel": "altcoin",
+    "interestRateModel": "degen:token",
     "collateralFactor": "0.4",
     "reserveFactor": "0.25"
   },
   {
     "underlying": "sol",
-    "interestRateModel": "altcoin",
+    "interestRateModel": "degen:token",
     "collateralFactor": "0.4",
     "reserveFactor": "0.25"
   },
   {
     "underlying": "uni",
-    "interestRateModel": "altcoin",
+    "interestRateModel": "degen:token",
     "collateralFactor": "0.4",
     "reserveFactor": "0.25"
   },
   {
     "underlying": "usdc",
-    "interestRateModel": "stablecoin",
+    "interestRateModel": "degen:stablecoin",
     "collateralFactor": "0.825",
     "reserveFactor": "0.1"
   },
   {
     "underlying": "usdt",
-    "interestRateModel": "stablecoin",
+    "interestRateModel": "degen:stablecoin",
     "collateralFactor": "0.8",
     "reserveFactor": "0.1"
   },
   {
     "underlying": "wbtc",
-    "interestRateModel": "wbtc",
+    "interestRateModel": "degen:wbtc",
     "collateralFactor": "0.8",
     "reserveFactor": "0.2"
   }
@@ -169,31 +190,31 @@ const testnetCoreMarkets: CTokenConfig[] = [
 const testnetDegenMarkets: CTokenConfig[] = [
   {
     "underlying": "eth",
-    "interestRateModel": "eth",
+    "interestRateModel": "degen:eth",
     "collateralFactor": "0.8",
     "reserveFactor": "0.2"
   },
   {
     "underlying": "link",
-    "interestRateModel": "altcoin",
+    "interestRateModel": "degen:token",
     "collateralFactor": "0.4",
     "reserveFactor": "0.25"
   },
   {
     "underlying": "usdc",
-    "interestRateModel": "stablecoin",
+    "interestRateModel": "degen:stablecoin",
     "collateralFactor": "0.825",
     "reserveFactor": "0.1"
   },
   {
     "underlying": "usdt",
-    "interestRateModel": "stablecoin",
+    "interestRateModel": "degen:stablecoin",
     "collateralFactor": "0.8",
     "reserveFactor": "0.1"
   },
   {
     "underlying": "wbtc",
-    "interestRateModel": "wbtc",
+    "interestRateModel": "degen:wbtc",
     "collateralFactor": "0.8",
     "reserveFactor": "0.2"
   }
