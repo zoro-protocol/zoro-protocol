@@ -11,56 +11,56 @@ const interestRateModels: InterestRateConfig[] = [
     "baseRatePerYear": "0.00",
     "multiplierPerYear": "0.04",
     "jumpMultiplierPerYear": "2",
-    "kink": "85"
+    "kink": "0.85"
   },
   {
     "name": "stablecoin",
     "baseRatePerYear": "0.00",
     "multiplierPerYear": "0.05",
     "jumpMultiplierPerYear": "2.5",
-    "kink": "80"
+    "kink": "0.80"
   },
   {
     "name": "wbtc",
     "baseRatePerYear": "0.00",
     "multiplierPerYear": "0.09",
     "jumpMultiplierPerYear": "2",
-    "kink": "75"
+    "kink": "0.75"
   },
   {
     "name": "blue-chip-alt",
     "baseRatePerYear": "0.02",
     "multiplierPerYear": "0.15",
     "jumpMultiplierPerYear": "4",
-    "kink": "60"
+    "kink": "0.60"
   },
   {
     "name": "degen:eth",
     "baseRatePerYear": "0.02",
     "multiplierPerYear": "0.08",
     "jumpMultiplierPerYear": "2",
-    "kink": "85"
+    "kink": "0.85"
   },
   {
     "name": "degen:stablecoin",
     "baseRatePerYear": "0.02",
     "multiplierPerYear": "0.10",
     "jumpMultiplierPerYear": "2.5",
-    "kink": "80"
+    "kink": "0.80"
   },
   {
     "name": "degen:token",
     "baseRatePerYear": "0.02",
     "multiplierPerYear": "0.2",
     "jumpMultiplierPerYear": "3",
-    "kink": "50"
+    "kink": "0.50"
   },
   {
     "name": "degen:wbtc",
     "baseRatePerYear": "0.02",
     "multiplierPerYear": "0.18",
     "jumpMultiplierPerYear": "2",
-    "kink": "75"
+    "kink": "0.75"
   }
 ];
 
