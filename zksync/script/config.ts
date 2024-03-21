@@ -230,7 +230,7 @@ const pools: PoolConfig[] = [
   {
     "name": "degen",
     "closeFactor": "0.5",
-    "liquidationIncentive": "1.1",
+    "liquidationIncentive": "1.15",
     "markets": degenMarkets,
   }
 ];
@@ -245,7 +245,7 @@ const testnetPools: PoolConfig[] = [
   {
     "name": "degen",
     "closeFactor": "0.5",
-    "liquidationIncentive": "1.1",
+    "liquidationIncentive": "1.15",
     "markets": testnetDegenMarkets,
   }
 ];
