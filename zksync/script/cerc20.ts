@@ -29,7 +29,7 @@ export async function deployCErc20(
     initialExchangeRateDecimals
   );
 
-  const admin: string = deployer.hre.getMainAddress("admin")
+  const admin: string = deployer.zkWallet.address;
 
   const cTokenArgs: CErc20ImmutableConstructorArgs = [
     underlyingAddr,

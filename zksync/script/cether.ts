@@ -14,7 +14,7 @@ export async function deployCEther(
   const initialExchangeRateMantissa: ethers.BigNumber = ethers.utils.parseUnits("0.02", initialExchangeRateDecimals);
   const name: string = "Zoro Ether";
   const symbol: string = "zETH";
-  const admin: string = deployer.hre.getMainAddress("admin");
+  const admin: string = deployer.zkWallet.address;
   const cetherArgs: CEtherConstructorArgs = [
     comptrollerAddress,
     interestRateModel,
