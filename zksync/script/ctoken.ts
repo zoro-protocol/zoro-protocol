@@ -127,6 +127,7 @@ export async function deployCTokenAll(
   comptroller: ethers.Contract,
   oracle: ethers.Contract,
   interestRates: InterestRateCollection,
+  pool: string,
   cTokenConfigs: CTokenConfig[]
 ): Promise<CTokenCollection> {
   const cTokens: CTokenCollection = {};
@@ -135,15 +136,24 @@ export async function deployCTokenAll(
   for (const config of cTokenConfigs) {
     const { underlying: underlyingSymbol, interestRateModel } = config;
 
-    const cToken: ethers.Contract = await deployCToken(
-      deployer,
-      comptroller,
-      underlyingSymbol,
-      interestRates[interestRateModel].address
-    );
+    const prefix = pool === "core" ? "" : `${pool}:`;
 
-    if (getChainId(deployer.hre) !== 260) {
-      await configureCToken(deployer, comptroller, oracle, cToken, config);
+    let cToken: ethers.Contract;
+
+    try {
+      const address = deployer.hre.getCTokenAddress(`${prefix}${underlyingSymbol}`);
+      cToken = await deployer.hre.ethers.getContractAt("CToken", address, deployer.zkWallet);
+    } catch {
+      cToken = await deployCToken(
+        deployer,
+        comptroller,
+        underlyingSymbol,
+        interestRates[interestRateModel].address
+      );
+
+      if (getChainId(deployer.hre) !== 260) {
+        await configureCToken(deployer, comptroller, oracle, cToken, config);
+      }
     }
 
     cTokens[underlyingSymbol] = cToken;

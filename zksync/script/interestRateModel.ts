@@ -35,12 +35,32 @@ export async function deployInterestRatesAll(deployer: Deployer, config: DeployC
 
   // Must complete txs sequentially for correct nonce
   for (const interestRateConfig of config.interestRateModels) {
-    const interestRate: ethers.Contract = await deployInterestRate(deployer, interestRateConfig);
-
     const { name } = interestRateConfig;
-    interestRates[name] = interestRate;
 
-    deployer.hre.recordMainAddress(`interest:${name}`, interestRate.address);
+    let interestRate: ethers.Contract;
+
+    try {
+      const address = deployer.hre.getCTokenAddress(`interest:${name}`);
+      interestRate = await deployer.hre.ethers.getContractAt("JumpRateModelV2", address, deployer.zkWallet);
+
+    } catch {
+      interestRate = await deployInterestRate(deployer, interestRateConfig);
+      deployer.hre.recordMainAddress(`interest:${name}`, interestRate.address);
+    }
+
+    interestRates[name] = interestRate;
+  }
+
+  return interestRates;
+}
+
+export async function getInterestRatesAll(deployer: Deployer, config: DeployConfig): Promise<InterestRateCollection> {
+  const interestRates: InterestRateCollection = {};
+  for (const interestRateConfig of config.interestRateModels) {
+    const { name } = interestRateConfig;
+
+    const interestRate: string = deployer.hre.getMainAddress(`interest:${name}`);
+    interestRates[name] = await deployer.hre.ethers.getContractAt("JumpRateModelV2", interestRate, deployer.zkWallet);
   }
 
   return interestRates;

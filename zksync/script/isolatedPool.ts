@@ -93,14 +93,25 @@ async function deployIsolatedPool(
 ): Promise<DeployReturn> {
   const prefix = config.name === "core" ? "" : `${config.name}:`;
 
-  const comptroller: ethers.Contract = await deployUnitroller(deployer, oracle.address, config);
-  deployer.hre.recordMainAddress(`${prefix}comptroller`, comptroller.address);
+  let comptroller: ethers.Contract;
 
-  const cTokens: CTokenCollection = await deployCTokenAll(deployer, comptroller, oracle, interestRates, config.markets);
+  try {
+    const prevComptroller: string = deployer.hre.getMainAddress(`${prefix}comptroller`);
+    comptroller = await deployer.hre.ethers.getContractAt("Comptroller", prevComptroller, deployer.zkWallet);
+  } catch {
+    comptroller = await deployUnitroller(deployer, oracle.address, config);
+    deployer.hre.recordMainAddress(`${prefix}comptroller`, comptroller.address);
+  }
+
+  const cTokens: CTokenCollection = await deployCTokenAll(deployer, comptroller, oracle, interestRates, config.name, config.markets);
   for (const [name, cToken] of Object.entries(cTokens)) {
     if (name === "eth") {
-      const maximillion = await deployMaximillion(deployer, cToken);
-      deployer.hre.recordMainAddress(`${prefix}maximillion`, maximillion.address);
+      try {
+        deployer.hre.getMainAddress(`${prefix}maximillion`);
+      } catch {
+        const maximillion = await deployMaximillion(deployer, cToken);
+        deployer.hre.recordMainAddress(`${prefix}maximillion`, maximillion.address);
+      }
     }
     deployer.hre.recordCTokenAddress(`${prefix}${name}`, cToken.address);
   }

@@ -29,6 +29,26 @@ export async function deployUnitroller(
   return comptroller;
 }
 
+export async function configureUnitroller(
+  deployer: Deployer,
+  unitroller: ethers.Contract,
+  oracleAddress: string,
+  config: PoolConfig
+): Promise<ethers.Contract> {
+  await upgradeComptroller(deployer, unitroller);
+
+  const comptroller: ethers.Contract = await deployer.hre.ethers.getContractAt(
+    "Comptroller",
+    unitroller.address,
+    deployer.zkWallet
+  );
+
+  const { closeFactor, liquidationIncentive }: PoolConfig = config;
+  await configureComptroller(comptroller, oracleAddress, closeFactor, liquidationIncentive);
+
+  return comptroller;
+}
+
 export async function upgradeComptroller(
   deployer: Deployer,
   unitroller: ethers.Contract
