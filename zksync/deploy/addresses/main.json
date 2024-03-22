@@ -13,6 +13,7 @@
   },
   "zoroLens": {
     "280": "0x1df5A659eC5fAe4aa4B2a22CDD5b936618635Bb1"
+    "324": "0xA81965E09e8040dB1Bc7E179F678Ccb9695a0018"
   },
   "multicall": {
     "280": "0x8214aC4216b1253106bAcFC2Bbbf23E5756645C8",
@@ -29,20 +30,36 @@
   },
   "interest:eth": {
     "280": "0xfD088D25182A3d6263F3AEeEFcD2904099D11CcF"
+    "324": "0xbecBDD88E1aa068E626Eb06fA9bD679b0A536Ee1"
   },
   "interest:stablecoin": {
     "280": "0xC9a62B9Cf3960E016FA14319a1a95e882A6D741f"
+    "324": "0x4513a8BE9591106b4215b99532D8f9CEC2040CE2"
   },
   "interest:wbtc": {
     "280": "0x74285835a614F708Bb1452a005d2B98b74E9Bcb2"
+    "324": "0x74426f50627eb84298506e74d989eD27b3C757E9"
   },
   "interest:blue-chip-alt": {
     "280": "0x3c0c546877210e0199eDE4A88183f12Becc9574b"
+    "324": "0xb726d698e678B656aa1561d5aE2Af131D2369B5e"
   },
   "interest:altcoin": {
     "280": "0xF04eC050df072dea08A6F8Ff2168fff56AB02be5"
   },
   "degen:maximillion": {
     "280": "0x62607652964Cd1Fd977f1d4Ac482D5AbFDf9a776"
+  },
+  "interest:degen:eth": {
+    "324": "0x0Ad04f2912D427DdEAE431Ee7f6CAC992F145C37"
+  },
+  "interest:degen:stablecoin": {
+    "324": "0xe08C055E5Fc18821e40Ec8BD9D7fBada96E53c9A"
+  },
+  "interest:degen:token": {
+    "324": "0x9A3Bb2954d7821d2e68585E043dE2b978deC9Bf6"
+  },
+  "interest:degen:wbtc": {
+    "324": "0xF204c9Bb8f3B693e698Bf805540B8e78BF999740"
   }
 }
