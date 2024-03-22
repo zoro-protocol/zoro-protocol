@@ -104,3 +104,5 @@ export type DeployReturn = {
   comptroller: ethers.Contract,
   cTokens: CTokenCollection
 };
+
+export type AddOracleConfigParams = { underlying: string };
