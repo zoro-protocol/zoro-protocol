@@ -5,6 +5,9 @@
     "doge": {
         "decimals": 18
     },
+    "dai": {
+        "decimals": 18
+    },
     "eth": {
         "decimals": 18
     },
